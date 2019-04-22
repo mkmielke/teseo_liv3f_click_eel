@@ -1,0 +1,59 @@
+{
+  "libName": "teseo_liv3f",
+  "manufacturer": "Digi-Key Electronics",
+  "description": "mikroBus compatible breakout board for ST's Teseo-LIV3F GPS module",
+  "version": "0",
+  "eelVersion": "3",
+  "shoppingCartLinks": {
+    "digikey": {
+      "links": {
+        "info":"https://www.digikey.com/maker/projects/c4072044fba34f7b9d5210b973331940"
+      },
+      "cartData": {
+        "part":"497-18163-1-ND",
+        "partid":"9556693",
+        "source":"dkstudio",
+        "qty":1
+      }
+    }
+  },
+  "requires": [
+    "embedded"
+  ],
+  "elements": [
+    {
+      "name": "TeseoLIV3F",
+      "type": "EmbeddedTeseoLIV3F",
+      "icon": "EmbeddedFunction.svg",
+      "defaultAbility": "printHello",
+      "defaultTrigger": "helloPrint",
+      "hidden": false,
+      "abilities": [
+        {
+          "name": "setup",
+          "hidden": true,
+          "triggers": []
+        },
+	{
+	  "name": "printHello",
+	  "triggers": ["helloPrint"]
+	}
+      ],
+      "properties": [
+        {
+          "name": "myproperty",
+          "type": "number",
+          "value": 0
+        }
+      ],
+      "triggers": [],
+      "variables": [],
+      "language": {
+        "en-US": {
+	  "EmbeddedTeseoLIV3F": "Teseo-LIV3F",
+	  "myproperty": "My Property"
+	}
+      }
+    }
+  ]
+}
