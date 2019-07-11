@@ -25,8 +25,8 @@
       "name": "TeseoLIV3F",
       "type": "EmbeddedTeseoLIV3F",
       "icon": "EmbeddedFunction.svg",
-      "defaultAbility": "printHello",
-      "defaultTrigger": "helloPrint",
+      "defaultAbility": "getLatitude",
+      "defaultTrigger": "latitudeGet",
       "hidden": false,
       "abilities": [
         {
@@ -35,8 +35,24 @@
           "triggers": []
         },
 	{
-	  "name": "printHello",
-	  "triggers": ["helloPrint"]
+	  "name": "getLatitude",
+	  "triggers": ["latitudeGet"]
+	},
+	{
+	  "name": "getLongitude",
+	  "triggers": ["longitudeGet"]
+	},
+	{
+	  "name": "getAltitude",
+	  "triggers": ["altitudeGet"]
+	},
+	{
+	  "name": "getNumSatellites",
+	  "triggers": ["numSatellitesGet"]
+	},
+	{
+	  "name": "posFix",
+	  "triggers":["fixCheck"]
 	}
       ],
       "properties": [
