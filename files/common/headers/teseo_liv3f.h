@@ -8,7 +8,11 @@
 
 typedef struct 
 {
-  int myproperty;
+  ATMO_GPIO_Device_Pin_t powerPin;
+  ATMO_GPIO_Device_Pin_t wupPin;
+  ATMO_GPIO_Device_Pin_t rstPin;
+  ATMO_DriverInstanceHandle_t gpioDriverInstance;
+  ATMO_DriverInstanceHandle_t i2cDriverInstance;
 } ATMO_TeseoLIV3F_Config_t;
 
 typedef struct

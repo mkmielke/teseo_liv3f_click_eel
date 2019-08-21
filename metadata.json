@@ -1,5 +1,5 @@
 {
-  "libName": "teseo_liv3f",
+  "libName": "TeseoLIV3F",
   "manufacturer": "Digi-Key Electronics",
   "description": "mikroBus compatible breakout board for ST's Teseo-LIV3F GPS module",
   "version": "0",
@@ -24,9 +24,9 @@
     {
       "name": "TeseoLIV3F",
       "type": "EmbeddedTeseoLIV3F",
-      "icon": "EmbeddedFunction.svg",
+      "icon": "EmbeddedTouch.svg",
       "defaultAbility": "getLatitude",
-      "defaultTrigger": "latitudeGet",
+      "defaultTrigger": "latitudeReceived",
       "hidden": false,
       "abilities": [
         {
@@ -36,38 +36,72 @@
         },
 	{
 	  "name": "getLatitude",
-	  "triggers": ["latitudeGet"]
+	  "triggers": ["latitudeReceived"]
 	},
 	{
 	  "name": "getLongitude",
-	  "triggers": ["longitudeGet"]
+	  "triggers": ["longitudeReceived"]
 	},
 	{
 	  "name": "getAltitude",
-	  "triggers": ["altitudeGet"]
+	  "triggers": ["altitudeReceived"]
 	},
 	{
 	  "name": "getNumSatellites",
-	  "triggers": ["numSatellitesGet"]
+	  "triggers": ["numSatellitesReceived"]
 	},
 	{
-	  "name": "posFix",
-	  "triggers":["fixCheck"]
+	  "name": "checkFix",
+	  "triggers":["fixChecked"]
 	}
       ],
       "properties": [
         {
-          "name": "myproperty",
-          "type": "number",
-          "value": 0
-        }
+	  "name": "i2cDriverInstance",
+	  "input": "driverInstance",
+	  "driverType": "i2c"
+        },
+	{
+	  "name": "gpioDriverInstance",
+	  "input": "driverInstance",
+	  "driverType": "gpio"
+	},
+	{
+	  "name": "powerPin",
+	  "input": "number",
+	  "value": 0
+	},
+	{
+	  "name": "wupPin",
+	  "input": "number",
+	  "value": 0
+	},
+	{
+	  "name": "rstPin",
+	  "input": "number",
+	  "value": 0
+	}
       ],
       "triggers": [],
       "variables": [],
       "language": {
         "en-US": {
 	  "EmbeddedTeseoLIV3F": "Teseo-LIV3F",
-	  "myproperty": "My Property"
+	  "getLatitude": "Get Latitude",
+	  "latitudeReceived": "Latitude Received",
+	  "getLongitude": "Get Longitude",
+	  "longitudeReceived": "Longitude Received",
+	  "getAltitude": "Get Altitude",
+	  "altitudeReceived": "Altitude Received",
+	  "getNumSatellites": "Get Num Satellites",
+	  "numSatellitesReceived": "Num Satellites Received",
+	  "checkFix": "Check Fix",
+	  "fixChecked": "Fix Checked",
+	  "i2cDriverInstance": "I2C Driver Instance",
+	  "gpioDriverInstance": "GPIO Driver Instance",
+	  "powerPin": "Power Pin",
+	  "wupPin": "WUP Pin",
+	  "rstPin": "RST Pin"
 	}
       }
     }
