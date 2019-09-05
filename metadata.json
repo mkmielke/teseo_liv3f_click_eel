@@ -67,11 +67,6 @@
 	  "driverType": "gpio"
 	},
 	{
-	  "name": "powerPin",
-	  "input": "number",
-	  "value": 0
-	},
-	{
 	  "name": "wupPin",
 	  "input": "number",
 	  "value": 0
@@ -99,7 +94,6 @@
 	  "fixChecked": "Fix Checked",
 	  "i2cDriverInstance": "I2C Driver Instance",
 	  "gpioDriverInstance": "GPIO Driver Instance",
-	  "powerPin": "Power Pin",
 	  "wupPin": "WUP Pin",
 	  "rstPin": "RST Pin"
 	}
