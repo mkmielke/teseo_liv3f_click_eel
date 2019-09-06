@@ -294,6 +294,8 @@ ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_Init(ATMO_TeseoLIV3F_Config_t *config)
 
 ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_SetConfiguration(const ATMO_TeseoLIV3F_Config_t *config)
 {
+	ATMO_GPIO_Config_t gpioConfig;
+
     if( config == NULL )
     {
         return ATMO_TeseoLIV3F_Status_Fail;
@@ -303,15 +305,14 @@ ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_SetConfiguration(const ATMO_TeseoLIV3F_
     _ATMO_TeseoLIV3F_config.configured = true;
 
     // Initialize I2C
-   // ATMO_I2C_Init(config->i2cDriverInstance);
+    // already done in app_src/atmosphere_platform.c
 
-    //ATMO_I2C_Peripheral_t i2cConfig;
-	//i2cConfig.operatingMode = ATMO_I2C_OperatingMode_Master;
-	//i2cConfig.baudRate = ATMO_I2C_BaudRate_Standard_Mode;
-	//ATMO_I2C_SetConfiguration(config->i2cDriverInstance, &i2cConfig);
+    // Set PC0 and PC1 as floating input
+    gpioConfig.pinMode = ATMO_GPIO_PinMode_Input_HighImpedance;
+    ATMO_GPIO_SetPinConfiguration( config->gpioDriverInstance, PC0, &gpioConfig );
+    ATMO_GPIO_SetPinConfiguration( config->gpioDriverInstance, PC1, &gpioConfig );
 
     // Reset GPS
-	ATMO_GPIO_Config_t gpioConfig;
 	gpioConfig.initialState = ATMO_GPIO_PinState_Low;
 	gpioConfig.pinMode = ATMO_GPIO_PinMode_Output_PushPull;
 	ATMO_GPIO_SetPinConfiguration(config->gpioDriverInstance, config->rstPin, &gpioConfig);
