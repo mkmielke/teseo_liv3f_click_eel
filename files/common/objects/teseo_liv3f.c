@@ -130,43 +130,6 @@ void ATMO_TeseoLIV3F_SetReportRate(int reportRateHz)
 */
 
 
-void ATMO_TeseoLIV3F_RxCb(void *data)
-{
-	char str[256];
-	ATMO_GetString((ATMO_Value_t *)data, str, 256);
-
-	ATMO_PLATFORM_DebugPrint("Str: %s\r\n", str);
-
-    // Try to get location info
-    ATMO_TeseoLIV3F_LocData_t locData;
-    if(ATMO_TeseoLIV3F_ParseMessage(str, &locData))
-    {
-        // lastLocDataReceived = true;
-        memcpy(&lastLocData, &locData, sizeof(locData));
-
-        if(_ATMO_TeseoLIV3F_config.locRxAbilityHandleSet)
-        {
-            ATMO_Value_t val;
-            ATMO_CreateValueBinary(&val, &locData, sizeof(locData));
-            ATMO_AddAbilityExecute(_ATMO_TeseoLIV3F_config.locRxAbilityHandle, &val);
-        }
-        if(_ATMO_TeseoLIV3F_config.longRxAbilityHandleSet)
-        {
-            ATMO_Value_t val;
-            ATMO_CreateValueFloat(&val, locData.longitude);
-            ATMO_AddAbilityExecute(_ATMO_TeseoLIV3F_config.longRxAbilityHandle, &val);
-        }
-        if(_ATMO_TeseoLIV3F_config.latRxAbilityHandleSet)
-        {
-            ATMO_Value_t val;
-            ATMO_CreateValueFloat(&val, locData.latitude);
-            ATMO_AddAbilityExecute(_ATMO_TeseoLIV3F_config.latRxAbilityHandle, &val);
-        }
-    }
-}
-
-
-
 ATMO_BOOL_t ATMO_TeseoLIV3F_ParseMessage( char* str, ATMO_TeseoLIV3F_LocData_t *msg )
 {
 	const char delim[] = "\xFF" ",";
