@@ -33,6 +33,7 @@ typedef struct
 	float altitude;
 	ATMO_BOOL_t posFix;
 	uint32_t numSatellites;
+	uint64_t expiration_time;
 } ATMO_TeseoLIV3F_LocData_t;
 
 
@@ -43,11 +44,11 @@ typedef struct
 ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_Init(ATMO_TeseoLIV3F_Config_t *config);
 ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_SetConfiguration(const ATMO_TeseoLIV3F_Config_t *config);
 ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLocation( void );
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLatitude( void );
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLongitude( void );
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_PosFix( void );
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetNumSatellites( void );
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetAltitude( void );
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLatitude( float * latitude );
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLongitude( float * longitude );
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_CheckFix( bool * posFix );
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetNumSatellites( uint8_t * numSatellites );
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetAltitude( float * altitude );
 
 
 #endif

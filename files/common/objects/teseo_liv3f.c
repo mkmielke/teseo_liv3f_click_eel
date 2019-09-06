@@ -11,6 +11,8 @@
 #define GPGLL_MSG_LEN 22
 #define I2C_RX_BUFF_LEN 101
 
+#define LOCATION_EXP_DELTA 1000 // location data expires after 1 second
+
 
 typedef struct {
     ATMO_TeseoLIV3F_Config_t config;
@@ -29,7 +31,7 @@ typedef struct {
 /******************************************************************************/
 static ATMO_TeseoLIV3F_Priv_Config _ATMO_TeseoLIV3F_config;
 
-static ATMO_BOOL_t lastLocDataReceived = false;
+//static ATMO_BOOL_t lastLocDataReceived = false;
 static ATMO_TeseoLIV3F_LocData_t lastLocData;
 /*
 // Private internal storage of driver configuration
@@ -139,7 +141,7 @@ void ATMO_TeseoLIV3F_RxCb(void *data)
     ATMO_TeseoLIV3F_LocData_t locData;
     if(ATMO_TeseoLIV3F_ParseMessage(str, &locData))
     {
-        lastLocDataReceived = true;
+        // lastLocDataReceived = true;
         memcpy(&lastLocData, &locData, sizeof(locData));
 
         if(_ATMO_TeseoLIV3F_config.locRxAbilityHandleSet)
@@ -318,9 +320,6 @@ ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_SetConfiguration(const ATMO_TeseoLIV3F_
 	ATMO_PLATFORM_DelayMilliseconds(300);
 	ATMO_GPIO_SetPinState(config->gpioDriverInstance, config->rstPin, ATMO_GPIO_PinState_High);
 
-	//gpioConfig.initialState = ATMO_GPIO_PinState_Low;
-	//ATMO_GPIO_SetPinConfiguration(config->gpioDriverInstance, config->powerPin, &gpioConfig);
-
 	gpioConfig.initialState = ATMO_GPIO_PinState_High;
 	ATMO_GPIO_SetPinConfiguration(config->gpioDriverInstance, config->wupPin, &gpioConfig);
 /*
@@ -349,10 +348,10 @@ ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLocation( void )
 	ATMO_I2C_MasterWrite( _ATMO_TeseoLIV3F_config.config.i2cDriverInstance, teseo_slave_addr, NULL, 0, (uint8_t*)gpgga_msg, GPGLL_MSG_LEN, 0xFFFFFFFF );
 
 	ATMO_PLATFORM_DelayMilliseconds( 50 );
-
 	ATMO_I2C_MasterRead( _ATMO_TeseoLIV3F_config.config.i2cDriverInstance, teseo_slave_addr,  NULL, 0, (uint8_t*)rx_buff, I2C_RX_BUFF_LEN, 0xFFFFFFFF );
 
 	ATMO_TeseoLIV3F_ParseMessage( rx_buff, &locData );
+	locData.expiration_time = ATMO_PLATFORM_UptimeMs() + LOCATION_EXP_DELTA;
 
 	memcpy( &lastLocData, &locData, sizeof(locData) );
 
@@ -384,36 +383,78 @@ ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_Init( ATMO_TeseoLIV3F_Config_t *config 
 }
 */
 
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLatitude( void )
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLatitude( float * latitude )
 {
-	return lastLocData.latitude + lastLocData.longitude + lastLocData.altitude;
-  //return last_location_data.latitude;
+	// Check if last location has expired
+	if ( lastLocData.expiration_time < ATMO_PLATFORM_UptimeMs() )
+	{
+		// Update location data
+		ATMO_TeseoLIV3F_GetLocation();
+	}
+
+	*latitude = lastLocData.latitude;
+
+	return ATMO_TeseoLIV3F_Status_Success;
 }
 
 
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLongitude( void )
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetLongitude( float * longitude )
 {
-	return lastLocData.longitude;
-  //return last_location_data.longitude;
+	// Check if last location has expired
+	if ( lastLocData.expiration_time < ATMO_PLATFORM_UptimeMs() )
+	{
+		// Update location data
+		ATMO_TeseoLIV3F_GetLocation();
+	}
+
+	*longitude = lastLocData.longitude;
+
+	return ATMO_TeseoLIV3F_Status_Success;
 }
 
 
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_PosFix( void )
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_CheckFix( bool * posFix )
 {
-  //return last_location_data.posFix;
+	// Check if last location has expired
+	if ( lastLocData.expiration_time < ATMO_PLATFORM_UptimeMs() )
+	{
+		// Update location data
+		ATMO_TeseoLIV3F_GetLocation();
+	}
+
+	*posFix = lastLocData.posFix;
+
+	return ATMO_TeseoLIV3F_Status_Success;
 }
 
 
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetNumSatellites( void )
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetNumSatellites( uint8_t * numSatellites )
 {
-  //return last_location_data.num_satellites;
+	// Check if last location has expired
+	if ( lastLocData.expiration_time < ATMO_PLATFORM_UptimeMs() )
+	{
+		// Update location data
+		ATMO_TeseoLIV3F_GetLocation();
+	}
+
+	*numSatellites = lastLocData.numSatellites;
+
+	return ATMO_TeseoLIV3F_Status_Success;
 }
 
 
-ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetAltitude( void )
+ATMO_TeseoLIV3F_Status_t ATMO_TeseoLIV3F_GetAltitude( float * altitude )
 {
-	return lastLocData.altitude;
-  //return last_location_data.altitude;
+	// Check if last location has expired
+	if ( lastLocData.expiration_time < ATMO_PLATFORM_UptimeMs() )
+	{
+		// Update location data
+		ATMO_TeseoLIV3F_GetLocation();
+	}
+
+	*altitude = lastLocData.altitude;
+
+	return ATMO_TeseoLIV3F_Status_Success;
 }
 
 

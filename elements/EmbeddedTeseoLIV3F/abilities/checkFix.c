@@ -1,2 +1,6 @@
-	ATMO_CreateValueBool( out, ATMO_TeseoLIV3F_PosFix() );
+	bool posFix;
+
+	ATMO_TeseoLIV3F_CheckFix( &posFix );
+	ATMO_CreateValueBool( out, posFix );
+
 	return ATMO_Status_Success;
