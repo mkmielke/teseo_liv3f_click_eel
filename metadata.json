@@ -1,7 +1,8 @@
 {
-  "libName": "TeseoLIV3F",
+  "libName": "teseoliv3fclick",
   "manufacturer": "Digi-Key Electronics",
   "description": "mikroBus compatible breakout board for ST's Teseo-LIV3F GPS module",
+  "type": "GPS Module",
   "version": "0",
   "eelVersion": "3",
   "shoppingCartLinks": {
